@@ -7,7 +7,7 @@ Channel Guardian allows you to password protect text channels via one simple com
 * `!protect <#channel> <password>` - Password protect the mentioned channel. Hiding it for everyone else.
 * `!unprotect <#channel>` - Removes the password protection and resets it to its previous state.
 
---
+---
 
 ## Setup
 1. Download the [latest release](https://github.com/condolent/channel-guardian/releases/latest)
