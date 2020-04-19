@@ -6,6 +6,11 @@ import java.util.Properties;
 
 public class PropertyHandler {
 	
+	/**
+	 * Load a property from the bot.properties file inside the classpath.
+	 * @param property a {@link java.lang.String String} value of the property key to fetch
+	 * @return a property value in a {@link java.lang.String String} format
+	 */
 	public String loadProperty(String property) {
 		final Properties prop = new Properties();
 		

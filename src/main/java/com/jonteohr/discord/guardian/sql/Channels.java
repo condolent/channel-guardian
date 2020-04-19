@@ -14,9 +14,9 @@ import net.dv8tion.jda.api.entities.TextChannel;
 public class Channels {
 	
 	/**
-	 * 
-	 * @param channel
-	 * @return
+	 * Check if a TextChannel is protected or not.
+	 * @param channel the {@link net.dv8tion.jda.api.entities.TextChannel TextChannel} to check
+	 * @return {@code true} if yes
 	 */
 	public boolean isChannelProtected(TextChannel channel) {
 		Query sql = new Query();
@@ -41,10 +41,10 @@ public class Channels {
 	
 	/**
 	 * Protects a channel with the given password and changes channel permissions to hide it.
-	 * @param channel
-	 * @param password
-	 * @param role
-	 * @return
+	 * @param channel a {@link net.dv8tion.jda.api.entities.TextChannel TextChannel} to password protect
+	 * @param password a {@link java.lang.String String} password
+	 * @param role the {@link net.dv8tion.jda.api.entities.Role Role} to grant access to
+	 * @return {@code true if success}
 	 */
 	public boolean protectChannel(TextChannel channel, String password, Role role) {
 		String chId = channel.getId();
@@ -68,11 +68,11 @@ public class Channels {
 	}
 	
 	/**
-	 * 
-	 * @param channel
-	 * @param password
-	 * @param role
-	 * @return
+	 * Removes the protection from a TextChannel.
+	 * @param channel the {@link net.dv8tion.jda.api.entities.TextChannel TextChannel} to unlock
+	 * @param role the {@link net.dv8tion.jda.api.entities.Role Role} that is connected to it
+	 * @return {@code true} if success
+	 * @apiNote This will also remove the access role, and reset the permission for the channel.
 	 */
 	public boolean unProtectChannel(TextChannel channel, Role role) {
 		String chId = channel.getId();

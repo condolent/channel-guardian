@@ -12,7 +12,7 @@ public class Query {
 	private PropertyHandler prop = new PropertyHandler();
 	
 	/**
-	 * Executes a query to the database
+	 * Executes a query to the database.
 	 * @param query {@link java.lang.String String} SQL query
 	 * @return {@code true} if success
 	 * @see #queryGet(String)
@@ -40,7 +40,7 @@ public class Query {
 	}
 	
 	/**
-	 * 
+	 * Retrieves a ResultSet from the database.
 	 * @param query {@link java.lang.String String} SQL query
 	 * @return {@link java.sql.ResultSet ResultSet} with results from query
 	 * @see #queryExec(String)

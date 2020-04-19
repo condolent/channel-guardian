@@ -41,11 +41,12 @@ public class ProtectChannel extends ListenerAdapter {
 			return;
 		}
 		
+		// Create a role for the channel and remember it's ID!
 		Role accessRole = e.getGuild().createRole()
 				.setName(target.getName())
 				.complete();
 		
-		if(!channels.protectChannel(target, password, accessRole)) {
+		if(!channels.protectChannel(target, password, accessRole)) { // Something with the Query probably went wrong
 			e.getChannel().sendMessage(":x: **Something went wrong.**").queue();
 			return;
 		}

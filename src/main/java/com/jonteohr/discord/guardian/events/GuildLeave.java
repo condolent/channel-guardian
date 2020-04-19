@@ -25,8 +25,9 @@ public class GuildLeave extends ListenerAdapter {
 			return;
 		}
 		
-		if(guildIds.contains(e.getGuild().getId())) {
+		if(guildIds.contains(e.getGuild().getId())) { // We don't want to track inactive guilds
 			sql.queryExec("DELETE FROM guilds WHERE guild_id='" + e.getGuild().getId() + "';");
+			sql.queryExec("DELETE FROM channels WHERE guild_id='" + e.getGuild().getId() + "';");
 			System.out.println("Removed..");
 		}
 	}
