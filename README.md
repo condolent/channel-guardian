@@ -1,6 +1,13 @@
 [![Build Status](https://travis-ci.org/condolent/channel-guardian.svg?branch=master)](https://travis-ci.org/condolent/channel-guardian) ![GitHub issues](https://img.shields.io/github/issues/condolent/channel-guardian) ![GitHub release (latest by date)](https://img.shields.io/github/v/release/condolent/channel-guardian)
 # Channel Guardian
-A discord bot that allows server managers to password protect text channels.
+Channel Guardian allows you to password protect text channels via one simple command. The bot will then hide the channel for everyone without the correct role.
+
+# Usage
+* `!password` - Get information regarding how to access a protected channel.
+* `!protect <#channel> <password>` - Password protect the mentioned channel. Hiding it for everyone else.
+* `!unprotect <#channel>` - Removes the password protection and resets it to its previous state.
+
+--
 
 ## Setup
 1. Download the [latest release](https://github.com/condolent/channel-guardian/releases/latest)
