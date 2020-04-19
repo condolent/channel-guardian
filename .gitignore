@@ -1,4 +1,4 @@
 resources/bot.properties
 target/
 bin/
-test/
+src/test/
