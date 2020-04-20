@@ -21,7 +21,7 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 public class App {
 	public static JDA jda;
 	
-	public static String prefix = "!";
+	public static String prefix = "g!";
 	public static int color = 0x3FB8FE;
 	public static String image = "https://netcube.xyz/guardian.png";
 	

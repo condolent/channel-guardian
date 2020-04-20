@@ -44,7 +44,7 @@ public class GuildReady extends ListenerAdapter {
 			newGuild(guild);
 		}
 		
-		jda.getPresence().setActivity(Activity.watching("!password"));
+		jda.getPresence().setActivity(Activity.watching("g!password"));
 	}
 	
 	private void newGuild(Guild guild) {

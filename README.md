@@ -3,9 +3,9 @@
 Channel Guardian allows you to password protect text channels via one simple command. The bot will then hide the channel for everyone without the correct role.
 
 # Usage
-* `!password` - Get information regarding how to access a protected channel.
-* `!protect <#channel> <password>` - Password protect the mentioned channel. Hiding it for everyone else.
-* `!unprotect <#channel>` - Removes the password protection and resets it to its previous state.
+* `g!password` - Get information regarding how to access a protected channel.
+* `g!protect <#channel> <password>` - Password protect the mentioned channel. Hiding it for everyone else.
+* `g!unprotect <#channel>` - Removes the password protection and resets it to its previous state.
 
 ---
 
