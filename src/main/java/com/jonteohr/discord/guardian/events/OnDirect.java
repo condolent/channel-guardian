@@ -42,6 +42,10 @@ public class OnDirect extends ListenerAdapter {
 			e1.printStackTrace();
 		}
 		
+		String guildName = "";
+		for(int i = 1; i < args.length; i++)
+			guildName = guildName + args[i] + " ";
+		
 		List<String> guildNames = new ArrayList<String>();
 		for(int i = 0; i < guilds.size(); i++)
 			guildNames.add(e.getJDA().getGuildById(guilds.get(i)).getName().toLowerCase());
@@ -57,7 +61,7 @@ public class OnDirect extends ListenerAdapter {
 			String pw = passwords.get(i);
 			Role role = guild.getRoleById(roles.get(i));
 
-			if(guild.getName().equalsIgnoreCase(args[1])) {
+			if(guild.getName().equalsIgnoreCase(guildName)) {
 				if(!guild.getTextChannels().contains(channel)) // if the channel is not in this server
 					continue;
 				if(!pw.equalsIgnoreCase(password)) // if the wrong pw for the channel/server was given
