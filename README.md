@@ -21,3 +21,8 @@ db.pass=password
 ```
 3. Replace the property values in your file with your settings.
 4. Build, done!
+
+---
+
+### Todo
+1. Password protect voice channels
