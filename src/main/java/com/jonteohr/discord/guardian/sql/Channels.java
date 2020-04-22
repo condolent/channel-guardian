@@ -57,10 +57,13 @@ public class Channels {
 		
 		// Hides the channel for @everyone
 		PermissionOverride permOverride = channel.getPermissionOverride(channel.getGuild().getPublicRole());
-		permOverride.getManager().deny(Permission.VIEW_CHANNEL).queue();
+		if(permOverride == null)
+			channel.putPermissionOverride(channel.getGuild().getPublicRole()).setDeny(Permission.VIEW_CHANNEL).queue();
+		else
+			permOverride.getManager().deny(Permission.VIEW_CHANNEL).queue();
 		
 		// Grants access to the channel for the new role
-		channel.createPermissionOverride(role)
+		channel.putPermissionOverride(role)
 		.setAllow(Permission.VIEW_CHANNEL)
 		.queue();
 		
@@ -88,7 +91,10 @@ public class Channels {
 		
 		// Un-hides the channel for @everyone
 		PermissionOverride permOverride = channel.getPermissionOverride(channel.getGuild().getPublicRole());
-		permOverride.getManager().clear(Permission.VIEW_CHANNEL).queue();
+		if(permOverride == null)
+			channel.putPermissionOverride(channel.getGuild().getPublicRole()).clear(Permission.VIEW_CHANNEL).queue();
+		else
+			permOverride.getManager().clear(Permission.VIEW_CHANNEL).queue();
 		
 		return true;
 	}

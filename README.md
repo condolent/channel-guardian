@@ -26,3 +26,4 @@ db.pass=password
 
 ### Todo
 1. Password protect voice channels
+2. Finish Wiki pages

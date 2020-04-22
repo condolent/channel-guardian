@@ -43,14 +43,19 @@ public class OnDirect extends ListenerAdapter {
 		}
 		
 		String guildName = "";
-		for(int i = 1; i < args.length; i++)
-			guildName = guildName + args[i] + " ";
+		for(int i = 1; i < args.length; i++) {
+			if(i == (args.length - 1)) {
+				guildName = guildName + args[i];
+			} else {
+				guildName = guildName + args[i] + " ";
+			}
+		}
 		
 		List<String> guildNames = new ArrayList<String>();
 		for(int i = 0; i < guilds.size(); i++)
 			guildNames.add(e.getJDA().getGuildById(guilds.get(i)).getName().toLowerCase());
 		
-		if(!passwords.contains(password) || !guildNames.contains(args[1].toLowerCase())) {
+		if(!passwords.contains(password) || !guildNames.contains(guildName.toLowerCase())) {
 			e.getChannel().sendMessage("The password or server name you entered is incorrect.").queue();
 			return;
 		}
@@ -60,7 +65,7 @@ public class OnDirect extends ListenerAdapter {
 			TextChannel channel = guild.getTextChannelById(channels.get(i));
 			String pw = passwords.get(i);
 			Role role = guild.getRoleById(roles.get(i));
-
+			
 			if(guild.getName().equalsIgnoreCase(guildName)) {
 				if(!guild.getTextChannels().contains(channel)) // if the channel is not in this server
 					continue;
