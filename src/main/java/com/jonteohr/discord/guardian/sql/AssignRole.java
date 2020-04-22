@@ -1,5 +1,7 @@
 package com.jonteohr.discord.guardian.sql;
 
+import com.jonteohr.discord.guardian.App;
+
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
@@ -13,9 +15,14 @@ public class AssignRole {
 	 * @param guild the {@link net.dv8tion.jda.api.entities.Guild Guild} to work inside.
 	 * @param role the {@link net.dv8tion.jda.api.entities.Role Role} to assign.
 	 */
-	public void grantUserAccess(User user, Guild guild, Role role) {
+	public boolean grantUserAccess(User user, Guild guild, Role role) {
 		Member member = guild.getMember(user);
 		
-		guild.addRoleToMember(member, role).complete();
+		if(role.getPosition() < App.getSelfRole(guild).getPosition()) { // Make sure hierarchy is correct for the guild
+			guild.addRoleToMember(member, role).complete();
+			return true;
+		}
+		
+		return false;
 	}
 }

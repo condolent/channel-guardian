@@ -72,7 +72,10 @@ public class OnDirect extends ListenerAdapter {
 				if(!pw.equalsIgnoreCase(password)) // if the wrong pw for the channel/server was given
 					continue;
 				
-				assignRole.grantUserAccess(e.getAuthor(), guild, role);
+				if(!assignRole.grantUserAccess(e.getAuthor(), guild, role)) {
+					e.getChannel().sendMessage(guild.getName() + " has an error with the roles. Please contact an server administrator to inform them about this!").queue();
+					break;
+				}
 				e.getChannel().sendMessage("Correct! I have given you a role to access the channel " + channel.getName() + " inside server " + guild.getName()).queue();
 				break;
 			} else {

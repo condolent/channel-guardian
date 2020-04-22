@@ -17,6 +17,8 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 
 public class App {
@@ -58,5 +60,14 @@ public class App {
 		permissions.add(Permission.MESSAGE_HISTORY);
 		permissions.add(Permission.VOICE_CONNECT);
 		permissions.add(Permission.MANAGE_PERMISSIONS);
+	}
+	
+	/**
+	 * Returns the Role that belongs to the bot.
+	 * @param guild a {@link net.dv8tion.jda.api.entities.Guild Guild} object to look in.
+	 * @return the bots owned {@link net.dv8tion.jda.api.entities.Role Role} or {@code null} if none
+	 */
+	public static Role getSelfRole(Guild guild) {
+		return guild.getSelfMember().getRoles().stream().filter(Role::isManaged).findFirst().orElse(null);
 	}
 }
