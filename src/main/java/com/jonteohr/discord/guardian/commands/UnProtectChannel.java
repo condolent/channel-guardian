@@ -31,6 +31,11 @@ public class UnProtectChannel extends ListenerAdapter {
 			return;
 		}
 		
+		if(!e.getGuild().getSelfMember().hasPermission(App.permissions)) {
+			e.getChannel().sendMessage(":x: **Permissions are not correct!**\nMake sure the I have the requested permissions from the invite-link. Else I won't work properly!").queue();
+			return;
+		}
+		
 		TextChannel target = e.getMessage().getMentionedChannels().get(0);
 		
 		if(!channels.isChannelProtected(target)) { // Tagged channel is already protected

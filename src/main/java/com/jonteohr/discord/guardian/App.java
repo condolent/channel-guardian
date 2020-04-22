@@ -16,6 +16,7 @@ import com.jonteohr.discord.guardian.property.PropertyHandler;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 
 public class App {
@@ -24,6 +25,8 @@ public class App {
 	public static String prefix = "g!";
 	public static int color = 0x3FB8FE;
 	public static String image = "https://netcube.xyz/guardian.png";
+	
+	public static Collection<Permission> permissions = new ArrayList<Permission>();
 	
 	public static void main(String[] args) throws LoginException {
 		PropertyHandler prop = new PropertyHandler();
@@ -46,5 +49,14 @@ public class App {
 		// PM
 		jda.addEventListener(new OnDirect());
 		
+		permissions.add(Permission.MANAGE_CHANNEL);
+		permissions.add(Permission.MANAGE_SERVER);
+		permissions.add(Permission.MANAGE_ROLES);
+		permissions.add(Permission.VIEW_CHANNEL);
+		permissions.add(Permission.MESSAGE_WRITE);
+		permissions.add(Permission.MESSAGE_READ);
+		permissions.add(Permission.MESSAGE_HISTORY);
+		permissions.add(Permission.VOICE_CONNECT);
+		permissions.add(Permission.MANAGE_PERMISSIONS);
 	}
 }
