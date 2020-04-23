@@ -19,7 +19,7 @@ public class Password extends ListenerAdapter {
 	};
 	
 	public void onGuildMessageReceived(GuildMessageReceivedEvent e) {
-		String[] args = e.getMessage().getContentRaw().split("\\\\s+");
+		String[] args = e.getMessage().getContentRaw().split("\\s+");
 		
 		if(!args[0].equalsIgnoreCase(App.prefix + "password"))
 			return;

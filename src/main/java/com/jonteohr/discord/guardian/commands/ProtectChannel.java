@@ -13,7 +13,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class ProtectChannel extends ListenerAdapter {
 	public void onGuildMessageReceived(GuildMessageReceivedEvent e) {
-		String[] args = e.getMessage().getContentRaw().split("\\\\s+");
+		String[] args = e.getMessage().getContentRaw().split("\\s+");
 		PermissionCheck permissionCheck = new PermissionCheck();
 		Channels channels = new Channels();
 		
