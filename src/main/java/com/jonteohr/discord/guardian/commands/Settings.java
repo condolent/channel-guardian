@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class Settings extends ListenerAdapter {
 	public void onGuildMessageReceived(GuildMessageReceivedEvent e) {
-		String[] args = e.getMessage().getContentRaw().split(" ");
+		String[] args = e.getMessage().getContentRaw().split("\\\\s+");
 		PermissionCheck perm = new PermissionCheck();
 		
 		if(!args[0].equalsIgnoreCase(App.prefix + "settings"))

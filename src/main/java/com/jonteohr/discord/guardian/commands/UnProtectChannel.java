@@ -17,7 +17,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class UnProtectChannel extends ListenerAdapter {
 	public void onGuildMessageReceived(GuildMessageReceivedEvent e) {
-		String[] args = e.getMessage().getContentRaw().split(" ");
+		String[] args = e.getMessage().getContentRaw().split("\\\\s+");
 		PermissionCheck permissionCheck = new PermissionCheck();
 		Query sql = new Query();
 		Channels channels = new Channels();
