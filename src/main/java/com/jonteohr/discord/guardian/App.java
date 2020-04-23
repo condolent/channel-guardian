@@ -27,7 +27,7 @@ public class App {
 	
 	public static String prefix = "g!";
 	public static int color = 0x3FB8FE;
-	public static String image = "https://netcube.xyz/guardian.png";
+	public static String image = "http://guardianbot.xyz/guardian_2.png";
 	
 	public static Collection<Permission> permissions = new ArrayList<Permission>();
 	public static Collection<Permission> channelPerms = new ArrayList<Permission>();
