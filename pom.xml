@@ -37,6 +37,11 @@
 		<artifactId>mysql-connector-java</artifactId>
 		<version>8.0.19</version>
 	</dependency> <!-- ./MySQL -->
+	<dependency> <!-- .TOP.GG -->
+        <groupId>org.discordbots</groupId>
+        <artifactId>DBL-Java-Library</artifactId>
+        <version>2.0.1</version>
+    </dependency> <!-- ./TOP.GG -->
   </dependencies>
 
   <repositories>
@@ -48,6 +53,10 @@
 			<name>jcenter-bintray</name>
 			<url>https://jcenter.bintray.com</url>
 		</repository>
+		<repository>
+	        <id>jitpack.io</id>
+	        <url>https://jitpack.io</url>
+	    </repository>
 	</repositories>
 
   <build>
