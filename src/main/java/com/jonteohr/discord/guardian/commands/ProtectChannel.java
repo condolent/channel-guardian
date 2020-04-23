@@ -52,15 +52,30 @@ public class ProtectChannel extends ListenerAdapter {
 			return;
 		}
 		
-		if(!e.getGuild().getSelfMember().hasPermission(Permission.ADMINISTRATOR)) {
-			PermissionOverride permOverride = targetChannel.getPermissionOverride(e.getGuild().getSelfMember());
-			if(!permOverride.getAllowed().containsAll(App.channelPerms)) {
-				String perms = "";
-				for(Permission perm : App.channelPerms) {
-					perms = perms + "`" + perm.getName() + "`\n";
-				}
+		if(!e.getGuild().getSelfMember().hasPermission(Permission.ADMINISTRATOR)) { // If bot doesn't have admin permissions, we gotta dig deeper.
+			String perms = "";
+			for(Permission perm : App.channelPerms) {
+				perms = perms + "`" + perm.getName() + "`\n";
+			}
+
+			if(targetChannel.getPermissionOverride(App.getSelfRole(e.getGuild())) == null && targetChannel.getPermissionOverride(e.getGuild().getSelfMember()) == null) { // If no permissions set in channel
 				e.getChannel().sendMessage(":x: **Channel permissions insufficient!**\nI need these permissions in the channel:\n" + perms).queue();
 				return;
+			}
+			
+			
+			if(targetChannel.getPermissionOverride(e.getGuild().getSelfMember()) == null)  { // Bot role permissions set
+				PermissionOverride permOverride = targetChannel.getPermissionOverride(App.getSelfRole(e.getGuild()));
+				if(!permOverride.getAllowed().containsAll(App.channelPerms)) {
+					e.getChannel().sendMessage(":x: **Channel permissions insufficient!**\nI need these permissions in the channel:\n" + perms).queue();
+					return;
+				}
+			} else if(targetChannel.getPermissionOverride(App.getSelfRole(e.getGuild())) == null)  { // Bot client permissions set
+				PermissionOverride permOverride = targetChannel.getPermissionOverride(e.getGuild().getSelfMember());
+				if(!permOverride.getAllowed().containsAll(App.channelPerms)) {
+					e.getChannel().sendMessage(":x: **Channel permissions insufficient!**\nI need these permissions in the channel:\n" + perms).queue();
+					return;
+				}
 			}
 		}
 		

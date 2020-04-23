@@ -10,6 +10,8 @@ import com.jonteohr.discord.guardian.permission.PermissionCheck;
 import com.jonteohr.discord.guardian.sql.Channels;
 import com.jonteohr.discord.guardian.sql.Query;
 
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.PermissionOverride;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -36,15 +38,15 @@ public class UnProtectChannel extends ListenerAdapter {
 			return;
 		}
 		
-		TextChannel target = e.getMessage().getMentionedChannels().get(0);
+		TextChannel targetChannel = e.getMessage().getMentionedChannels().get(0);
 		
-		if(!channels.isChannelProtected(target)) { // Tagged channel is already protected
+		if(!channels.isChannelProtected(targetChannel)) { // Tagged channel is already protected
 			e.getChannel().sendMessage(":x: **Channel is not protected!**").queue();
 			return;
 		}
 		
 		List<String> roleList = new ArrayList<String>();
-		ResultSet res = sql.queryGet("SELECT role FROM channels WHERE channel='" + target.getId() + "' AND guild_id='" + e.getGuild().getId() + "';");
+		ResultSet res = sql.queryGet("SELECT role FROM channels WHERE channel='" + targetChannel.getId() + "' AND guild_id='" + e.getGuild().getId() + "';");
 		try {
 			while(res.next()) {
 				roleList.add(res.getString(1));
@@ -56,12 +58,40 @@ public class UnProtectChannel extends ListenerAdapter {
 		
 		Role accessRole = e.getGuild().getRoleById(roleList.get(0));
 		
-		if(!channels.unProtectChannel(target, accessRole)) {
+		
+		if(!e.getGuild().getSelfMember().hasPermission(Permission.ADMINISTRATOR)) { // If bot doesn't have admin permissions, we gotta dig deeper.
+			String perms = "";
+			for(Permission perm : App.channelPerms) {
+				perms = perms + "`" + perm.getName() + "`\n";
+			}
+
+			if(targetChannel.getPermissionOverride(App.getSelfRole(e.getGuild())) == null && targetChannel.getPermissionOverride(e.getGuild().getSelfMember()) == null) { // If no permissions set in channel
+				e.getChannel().sendMessage(":x: **Channel permissions insufficient!**\nI need these permissions in the channel:\n" + perms).queue();
+				return;
+			}
+			
+			
+			if(targetChannel.getPermissionOverride(e.getGuild().getSelfMember()) == null)  { // Bot role permissions set
+				PermissionOverride permOverride = targetChannel.getPermissionOverride(App.getSelfRole(e.getGuild()));
+				if(!permOverride.getAllowed().containsAll(App.channelPerms)) {
+					e.getChannel().sendMessage(":x: **Channel permissions insufficient!**\nI need these permissions in the channel:\n" + perms).queue();
+					return;
+				}
+			} else if(targetChannel.getPermissionOverride(App.getSelfRole(e.getGuild())) == null)  { // Bot client permissions set
+				PermissionOverride permOverride = targetChannel.getPermissionOverride(e.getGuild().getSelfMember());
+				if(!permOverride.getAllowed().containsAll(App.channelPerms)) {
+					e.getChannel().sendMessage(":x: **Channel permissions insufficient!**\nI need these permissions in the channel:\n" + perms).queue();
+					return;
+				}
+			}
+		}
+		
+		if(!channels.unProtectChannel(targetChannel, accessRole)) {
 			e.getChannel().sendMessage(":x: **Something went wrong.**").queue();
 			return;
 		}
 
-		e.getChannel().sendMessage(":white_check_mark: Channel " + target.getAsMention() + " is no longer password protected!").queue();
+		e.getChannel().sendMessage(":white_check_mark: Channel " + targetChannel.getAsMention() + " is no longer password protected!").queue();
 		return;
 	}
 }
