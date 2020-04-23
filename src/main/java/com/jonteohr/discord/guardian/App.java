@@ -30,6 +30,7 @@ public class App {
 	public static String image = "https://netcube.xyz/guardian.png";
 	
 	public static Collection<Permission> permissions = new ArrayList<Permission>();
+	public static Collection<Permission> channelPerms = new ArrayList<Permission>();
 	
 	public static void main(String[] args) throws LoginException {
 		PropertyHandler prop = new PropertyHandler();
@@ -63,6 +64,10 @@ public class App {
 		permissions.add(Permission.MESSAGE_READ);
 		permissions.add(Permission.MESSAGE_HISTORY);
 		permissions.add(Permission.VOICE_CONNECT);
+		
+		channelPerms.add(Permission.MESSAGE_READ);
+		channelPerms.add(Permission.MANAGE_CHANNEL);
+		channelPerms.add(Permission.MANAGE_PERMISSIONS);
 	}
 	
 	/**

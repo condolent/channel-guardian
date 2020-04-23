@@ -4,6 +4,8 @@ import com.jonteohr.discord.guardian.App;
 import com.jonteohr.discord.guardian.permission.PermissionCheck;
 import com.jonteohr.discord.guardian.sql.Channels;
 
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.PermissionOverride;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -33,10 +35,10 @@ public class ProtectChannel extends ListenerAdapter {
 			return;
 		}
 		
-		TextChannel target = e.getMessage().getMentionedChannels().get(0);
+		TextChannel targetChannel = e.getMessage().getMentionedChannels().get(0);
 		String password = args[2];
 		
-		if(channels.isChannelProtected(target)) { // Tagged channel is already protected
+		if(channels.isChannelProtected(targetChannel)) { // Tagged channel is already protected
 			e.getChannel().sendMessage(":x: **Channel already protected!**").queue();
 			return;
 		}
@@ -46,17 +48,29 @@ public class ProtectChannel extends ListenerAdapter {
 			return;
 		}
 		
+		if(!e.getGuild().getSelfMember().hasPermission(Permission.ADMINISTRATOR)) {
+			PermissionOverride permOverride = targetChannel.getPermissionOverride(App.getSelfRole(e.getGuild()));
+			if(!permOverride.getAllowed().containsAll(App.channelPerms)) {
+				String perms = "";
+				for(Permission perm : App.channelPerms) {
+					perms = perms + "`" + perm.getName() + "`\n";
+				}
+				e.getChannel().sendMessage(":x: **Channel permissions insufficient!**\nI need these permissions in the channel:\n" + perms).queue();
+				return;
+			}
+		}
+		
 		// Create a role for the channel and remember it's ID!
 		Role accessRole = e.getGuild().createRole()
-				.setName(target.getName())
+				.setName(targetChannel.getName())
 				.complete();
 		
-		if(!channels.protectChannel(target, password, accessRole)) { // Something with the Query probably went wrong
+		if(!channels.protectChannel(targetChannel, password, accessRole)) { // Something with the Query probably went wrong
 			e.getChannel().sendMessage(":x: **Something went wrong.**").queue();
 			return;
 		}
 		
-		e.getChannel().sendMessage(":white_check_mark: Channel " + target.getAsMention() + " is now password protected!").queue();
+		e.getChannel().sendMessage(":white_check_mark: Channel " + targetChannel.getAsMention() + " is now password protected!").queue();
 		return;
 	}
 }
