@@ -66,12 +66,16 @@ public class GuildReady extends ListenerAdapter {
 				+ "But they will need the password to gain access to a protected channel.\n\n"
 				+ "That was all for me now! Good luck!");
 		
-		if(!App.getSelfRole(guild).hasPermission(Permission.ADMINISTRATOR)) {
+		if(!guild.getSelfMember().hasPermission(Permission.ADMINISTRATOR)) {
+			String perms = "";
+			for(Permission perm : App.channelPerms) {
+				perms = perms + "`" + perm.getName() + "` ";
+			}
 			EmbedBuilder emb = new EmbedBuilder();
 			emb.setAuthor("Permission warning", null, "http://guardianbot.xyz/attention-clipart-warning-triangle-2.png");
 			emb.setColor(0xD52D42);
 			emb.setDescription("I don't seem to have administrator access. That's fine! I can still do my job.\n"
-					+ "However you have to make sure I have the `" + Permission.MANAGE_CHANNEL.getName() + "`, `" + Permission.MANAGE_PERMISSIONS.getName() + "` and `" + Permission.MESSAGE_READ.getName() + "` permissions in the channel you want me to work inside.");
+					+ "However you have to make sure I have the " + perms + " permissions in the channel you want me to work inside.");
 			emb.appendDescription("\nHere's a list of permissions I need in the server.");
 			String permList = "";
 			for(Permission perm : App.permissions) {
@@ -83,5 +87,9 @@ public class GuildReady extends ListenerAdapter {
 		}
 		
 		channel.sendMessage(msg.build()).queue();
+		
+		if(App.getSelfRole(guild) == null || !guild.getSelfMember().getRoles().contains(App.getSelfRole(guild))) { // If the bot doesn't have a role assigned, or the role does not exist
+			channel.sendMessage(":x: **I don't have a role assigned to me!**\nI need a role assigned to me. Create one, give it the correct permissions as listed above and make sure to name it `Channel Guardian`!").queue();
+		}
 	}
 }

@@ -54,12 +54,12 @@ public class App {
 		// PM
 		jda.addEventListener(new OnDirect());
 		
-		permissions.add(Permission.MANAGE_CHANNEL);
 		permissions.add(Permission.MANAGE_SERVER);
 		permissions.add(Permission.MANAGE_ROLES);
+		permissions.add(Permission.MANAGE_CHANNEL);
+		permissions.add(Permission.NICKNAME_CHANGE);
 		permissions.add(Permission.VIEW_CHANNEL);
 		permissions.add(Permission.MANAGE_PERMISSIONS);
-		permissions.add(Permission.NICKNAME_CHANGE);
 		permissions.add(Permission.MESSAGE_WRITE);
 		permissions.add(Permission.MESSAGE_READ);
 		permissions.add(Permission.MESSAGE_HISTORY);
@@ -76,6 +76,13 @@ public class App {
 	 * @return the bots owned {@link net.dv8tion.jda.api.entities.Role Role} or {@code null} if none
 	 */
 	public static Role getSelfRole(Guild guild) {
-		return guild.getSelfMember().getRoles().stream().filter(Role::isManaged).findFirst().orElse(null);
+		if(guild.getSelfMember().getRoles().stream().filter(Role::isManaged).findFirst().orElse(null) == null) { // If the bot didn't create its own role
+			if(guild.getRolesByName(guild.getSelfMember().getUser().getName(), true).size() > 0) // Get a role with name == bot name and make sure we can find something
+				return guild.getRolesByName(guild.getSelfMember().getUser().getName(), true).get(0);
+			
+			return null; // The role doesn't exist
+		}
+		
+		return guild.getSelfMember().getRoles().stream().filter(Role::isManaged).findFirst().orElse(null); // Return the bots' own managed role
 	}
 }

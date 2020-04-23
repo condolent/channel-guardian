@@ -18,9 +18,14 @@ public class AssignRole {
 	public boolean grantUserAccess(User user, Guild guild, Role role) {
 		Member member = guild.getMember(user);
 		
-		if(role.getPosition() < App.getSelfRole(guild).getPosition()) { // Make sure hierarchy is correct for the guild
-			guild.addRoleToMember(member, role).complete();
-			return true;
+		if(App.getSelfRole(guild) == null)
+			return false;
+		
+		if(guild.getRoles().contains(App.getSelfRole(guild))) {
+			if(role.getPosition() < App.getSelfRole(guild).getPosition()) { // Make sure hierarchy is correct for the guild
+				guild.addRoleToMember(member, role).complete();
+				return true;
+			}
 		}
 		
 		return false;

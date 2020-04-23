@@ -31,7 +31,11 @@ public class ProtectChannel extends ListenerAdapter {
 		}
 		
 		if(!e.getGuild().getSelfMember().hasPermission(App.permissions)) {
-			e.getChannel().sendMessage(":x: **Permissions are not correct!**\nMake sure the I have the requested permissions from the invite-link. Else I won't work properly!").queue();
+			String perms = "";
+			for(Permission perm : App.permissions) {
+				perms = perms + "`" + perm.getName() + "`\n";
+			}
+			e.getChannel().sendMessage(":x: **Permissions are not correct!**\nMake sure the I have the following server permissions:\n" + perms).queue();
 			return;
 		}
 		
@@ -49,7 +53,7 @@ public class ProtectChannel extends ListenerAdapter {
 		}
 		
 		if(!e.getGuild().getSelfMember().hasPermission(Permission.ADMINISTRATOR)) {
-			PermissionOverride permOverride = targetChannel.getPermissionOverride(App.getSelfRole(e.getGuild()));
+			PermissionOverride permOverride = targetChannel.getPermissionOverride(e.getGuild().getSelfMember());
 			if(!permOverride.getAllowed().containsAll(App.channelPerms)) {
 				String perms = "";
 				for(Permission perm : App.channelPerms) {
