@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.jonteohr.discord.guardian.permission.PermissionErr;
+
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.PermissionOverride;
@@ -55,17 +57,20 @@ public class Channels {
 		if(!sql.queryExec("INSERT INTO channels(`guild_id`,`channel`,`password`,`role`) VALUES('" + guild.getId() + "','" + chId + "','" + password + "','" + roleId + "');"))
 			return false;
 		
-		// Hides the channel for @everyone
-		PermissionOverride permOverride = channel.getPermissionOverride(channel.getGuild().getPublicRole());
-		if(permOverride == null)
-			channel.putPermissionOverride(channel.getGuild().getPublicRole()).setDeny(Permission.VIEW_CHANNEL).queue();
-		else
-			permOverride.getManager().deny(Permission.VIEW_CHANNEL).queue();
-		
 		// Grants access to the channel for the new role
 		channel.putPermissionOverride(role)
 		.setAllow(Permission.VIEW_CHANNEL)
-		.queue();
+		.queue(
+			null,
+			failure -> PermissionErr.BotPerm(channel.getGuild().getDefaultChannel())
+		);
+		
+		// Hides the channel for @everyone
+		PermissionOverride permOverride = channel.getPermissionOverride(channel.getGuild().getPublicRole());
+		if(permOverride == null)
+			channel.putPermissionOverride(channel.getGuild().getPublicRole()).setDeny(Permission.VIEW_CHANNEL).queue(null, error -> PermissionErr.BotPerm(channel.getGuild().getDefaultChannel()));
+		else
+			permOverride.getManager().deny(Permission.VIEW_CHANNEL).queue(null, error -> PermissionErr.BotPerm(channel.getGuild().getDefaultChannel()));
 		
 		return true;
 	}
@@ -92,9 +97,9 @@ public class Channels {
 		// Un-hides the channel for @everyone
 		PermissionOverride permOverride = channel.getPermissionOverride(channel.getGuild().getPublicRole());
 		if(permOverride == null)
-			channel.putPermissionOverride(channel.getGuild().getPublicRole()).clear(Permission.VIEW_CHANNEL).queue();
+			channel.putPermissionOverride(channel.getGuild().getPublicRole()).clear(Permission.VIEW_CHANNEL).queue(null, error -> PermissionErr.BotPerm(channel.getGuild().getDefaultChannel()));
 		else
-			permOverride.getManager().clear(Permission.VIEW_CHANNEL).queue();
+			permOverride.getManager().clear(Permission.VIEW_CHANNEL).queue(null, error -> PermissionErr.BotPerm(channel.getGuild().getDefaultChannel()));
 		
 		return true;
 	}
