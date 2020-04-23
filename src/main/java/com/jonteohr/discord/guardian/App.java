@@ -7,6 +7,7 @@ import javax.security.auth.login.LoginException;
 
 import com.jonteohr.discord.guardian.commands.Password;
 import com.jonteohr.discord.guardian.commands.ProtectChannel;
+import com.jonteohr.discord.guardian.commands.Settings;
 import com.jonteohr.discord.guardian.commands.UnProtectChannel;
 import com.jonteohr.discord.guardian.events.GuildLeave;
 import com.jonteohr.discord.guardian.events.GuildReady;
@@ -43,6 +44,7 @@ public class App {
 		jda.addEventListener(new ProtectChannel());
 		jda.addEventListener(new UnProtectChannel());
 		jda.addEventListener(new Password());
+		jda.addEventListener(new Settings());
 		
 		// Events
 		jda.addEventListener(new GuildReady());
@@ -55,11 +57,12 @@ public class App {
 		permissions.add(Permission.MANAGE_SERVER);
 		permissions.add(Permission.MANAGE_ROLES);
 		permissions.add(Permission.VIEW_CHANNEL);
+		permissions.add(Permission.MANAGE_PERMISSIONS);
+		permissions.add(Permission.NICKNAME_CHANGE);
 		permissions.add(Permission.MESSAGE_WRITE);
 		permissions.add(Permission.MESSAGE_READ);
 		permissions.add(Permission.MESSAGE_HISTORY);
 		permissions.add(Permission.VOICE_CONNECT);
-		permissions.add(Permission.MANAGE_PERMISSIONS);
 	}
 	
 	/**

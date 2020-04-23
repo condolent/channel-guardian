@@ -41,7 +41,7 @@ public class GuildReady extends ListenerAdapter {
 		}
 		
 		if(!guildIds.contains(guild.getId())) {
-			sql.queryExec("INSERT INTO guilds(`guild_id`) VALUES('" + guild.getId() + "');");
+			sql.queryExec("INSERT INTO guilds(`guild_id`,`prefix`) VALUES('" + guild.getId() + "','g!');");
 			newGuild(guild);
 		}
 		
