@@ -5,7 +5,6 @@ import com.jonteohr.discord.guardian.permission.PermissionCheck;
 import com.jonteohr.discord.guardian.sql.Channels;
 
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.PermissionOverride;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -57,25 +56,10 @@ public class ProtectChannel extends ListenerAdapter {
 			for(Permission perm : App.channelPerms) {
 				perms = perms + "`" + perm.getName() + "`\n";
 			}
-
-			if(targetChannel.getPermissionOverride(App.getSelfRole(e.getGuild())) == null && targetChannel.getPermissionOverride(e.getGuild().getSelfMember()) == null) { // If no permissions set in channel
+			
+			if(!e.getGuild().getSelfMember().hasPermission(targetChannel, App.channelPerms)) { // Bot does not have the channel permissions
 				e.getChannel().sendMessage(":x: **Channel permissions insufficient!**\nI need these permissions in the channel:\n" + perms).queue();
 				return;
-			}
-			
-			
-			if(targetChannel.getPermissionOverride(e.getGuild().getSelfMember()) == null)  { // Bot role permissions set
-				PermissionOverride permOverride = targetChannel.getPermissionOverride(App.getSelfRole(e.getGuild()));
-				if(!permOverride.getAllowed().containsAll(App.channelPerms)) {
-					e.getChannel().sendMessage(":x: **Channel permissions insufficient!**\nI need these permissions in the channel:\n" + perms).queue();
-					return;
-				}
-			} else if(targetChannel.getPermissionOverride(App.getSelfRole(e.getGuild())) == null)  { // Bot client permissions set
-				PermissionOverride permOverride = targetChannel.getPermissionOverride(e.getGuild().getSelfMember());
-				if(!permOverride.getAllowed().containsAll(App.channelPerms)) {
-					e.getChannel().sendMessage(":x: **Channel permissions insufficient!**\nI need these permissions in the channel:\n" + perms).queue();
-					return;
-				}
 			}
 		}
 		
