@@ -30,5 +30,7 @@ public class GuildLeave extends ListenerAdapter {
 			sql.queryExec("DELETE FROM channels WHERE guild_id='" + e.getGuild().getId() + "';");
 			System.out.println("Removed..");
 		}
+		
+//		App.dbl.setStats(App.jda.getGuilds().size()); // Send stats to Top.GG
 	}
 }

@@ -5,6 +5,8 @@ import java.util.Collection;
 
 import javax.security.auth.login.LoginException;
 
+import org.discordbots.api.client.DiscordBotListAPI;
+
 import com.jonteohr.discord.guardian.commands.Password;
 import com.jonteohr.discord.guardian.commands.ProtectChannel;
 import com.jonteohr.discord.guardian.commands.Settings;
@@ -24,6 +26,7 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 
 public class App {
 	public static JDA jda;
+	public static DiscordBotListAPI dbl;
 	
 	public static String prefix = "g!";
 	public static int color = 0x3FB8FE;
@@ -40,6 +43,11 @@ public class App {
 		jda = JDABuilder.create(prop.loadProperty("token"), intents)
 				.setStatus(OnlineStatus.ONLINE)
 				.build();
+		
+//		dbl = new DiscordBotListAPI.Builder()
+//				.token(prop.loadProperty("apiToken"))
+//				.botId("701037124996169738")
+//				.build();
 		
 		// Commands
 		jda.addEventListener(new ProtectChannel());
