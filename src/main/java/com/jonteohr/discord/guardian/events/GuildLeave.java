@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.jonteohr.discord.guardian.App;
 import com.jonteohr.discord.guardian.sql.Query;
 
 import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
@@ -31,6 +32,6 @@ public class GuildLeave extends ListenerAdapter {
 			System.out.println("Removed..");
 		}
 		
-//		App.dbl.setStats(App.jda.getGuilds().size()); // Send stats to Top.GG
+		App.dbl.setStats(App.jda.getGuilds().size()); // Send stats to Top.GG
 	}
 }

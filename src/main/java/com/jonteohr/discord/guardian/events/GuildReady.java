@@ -22,13 +22,13 @@ public class GuildReady extends ListenerAdapter {
 	public void onGuildReady(GuildReadyEvent e) {
 		joinedGuild(e.getGuild(), e.getJDA());
 		
-//		App.dbl.setStats(App.jda.getGuilds().size()); // Send stats to Top.GG
+		App.dbl.setStats(App.jda.getGuilds().size()); // Send stats to Top.GG
 	}
 	
 	public void onGuildJoin(GuildJoinEvent e) {
 		joinedGuild(e.getGuild(), e.getJDA());
 		
-//		App.dbl.setStats(App.jda.getGuilds().size()); // Send stats to Top.GG
+		App.dbl.setStats(App.jda.getGuilds().size()); // Send stats to Top.GG
 	}
 	
 	private void joinedGuild(Guild guild, JDA jda) {

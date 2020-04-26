@@ -44,10 +44,10 @@ public class App {
 				.setStatus(OnlineStatus.ONLINE)
 				.build();
 		
-//		dbl = new DiscordBotListAPI.Builder()
-//				.token(prop.loadProperty("apiToken"))
-//				.botId("701037124996169738")
-//				.build();
+		dbl = new DiscordBotListAPI.Builder()
+				.token(prop.loadProperty("apiToken"))
+				.botId("701037124996169738")
+				.build();
 		
 		// Commands
 		jda.addEventListener(new ProtectChannel());
