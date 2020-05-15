@@ -50,7 +50,7 @@ public class UnProtectChannel extends ListenerAdapter {
 		
 		// No channel mentioned and not a voice channel
 		if(e.getMessage().getMentionedChannels().size() < 1 && e.getGuild().getVoiceChannelsByName(name, true).size() < 1) {
-			e.getChannel().sendMessage(":x: No text channel was mentioned, and could not find a voice channel named ").queue(); //name).queue();
+			e.getChannel().sendMessage(":x: No text channel was mentioned, and could not find a voice channel named " + name).queue(); //name).queue();
 			return;
 		}
 		
