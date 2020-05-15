@@ -25,7 +25,7 @@ public class ProtectChannel extends ListenerAdapter {
 			return;
 		// Not enough arguments
 		if(args.length < 3) {
-			e.getChannel().sendMessage(":x: **Incorrect usage!**\nCorrect usage: `" + App.prefix + "protect <#channel> <password>`").queue();
+			e.getChannel().sendMessage(":x: **Incorrect usage!**\nCorrect usage: `" + App.prefix + "protect <password> <#channel>`").queue();
 			return;
 		}
 		
