@@ -146,8 +146,39 @@ public class Channels {
 	 * @param role the {@link net.dv8tion.jda.api.entities.Role Role} that is connected to it
 	 * @return {@code true} if success
 	 * @apiNote This will also remove the access role, and reset the permission for the channel.
+	 * @see #unProtectChannel(VoiceChannel, Role)
 	 */
 	public boolean unProtectChannel(TextChannel channel, Role role) {
+		String chId = channel.getId();
+		String roleId = role.getId();
+		Guild guild = channel.getGuild();
+		Query sql = new Query();
+		
+		if(!sql.queryExec("DELETE FROM channels WHERE guild_id='" + guild.getId() + "' AND channel='" + chId + "' AND role='" + roleId + "';"))
+			return false;
+		
+		// Removes the access role
+		role.delete().complete();
+		
+		// Un-hides the channel for @everyone
+		PermissionOverride permOverride = channel.getPermissionOverride(channel.getGuild().getPublicRole());
+		if(permOverride == null)
+			channel.putPermissionOverride(channel.getGuild().getPublicRole()).clear(Permission.VIEW_CHANNEL).queue(null, error -> PermissionErr.BotPerm(channel.getGuild().getDefaultChannel()));
+		else
+			permOverride.getManager().clear(Permission.VIEW_CHANNEL).queue(null, error -> PermissionErr.BotPerm(channel.getGuild().getDefaultChannel()));
+		
+		return true;
+	}
+	
+	/**
+	 * Removes the protection from a VoiceChannel.
+	 * @param channel the {@link net.dv8tion.jda.api.entities.VoiceChannel VoiceChannel} to unlock
+	 * @param role the {@link net.dv8tion.jda.api.entities.Role Role} that is connected to it
+	 * @return {@code true} if success
+	 * @apiNote This will also remove the access role, and reset the permission for the channel.
+	 * @see #unProtectChannel(TextChannel, Role)
+	 */
+	public boolean unProtectChannel(VoiceChannel channel, Role role) {
 		String chId = channel.getId();
 		String roleId = role.getId();
 		Guild guild = channel.getGuild();

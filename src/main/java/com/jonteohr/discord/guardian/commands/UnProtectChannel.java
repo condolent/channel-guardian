@@ -23,15 +23,19 @@ public class UnProtectChannel extends ListenerAdapter {
 		Query sql = new Query();
 		Channels channels = new Channels();
 		
-		if(!args[0].equalsIgnoreCase(App.prefix + "unprotect")) // Don't listen unless this command is used
+		// Don't listen unless this command is used
+		if(!args[0].equalsIgnoreCase(App.prefix + "unprotect"))
 			return;
-		if(!permissionCheck.isAdmin(e.getMember()) || !permissionCheck.isModerator(e.getMember())) // Author is not allowed to use this
+		// Author is not allowed to use this
+		if(!permissionCheck.isAdmin(e.getMember()) || !permissionCheck.isModerator(e.getMember()))
 			return;
-		if(args.length < 2 || !args[1].contains("#")) { // Not enough arguments or channel not tagged
+		// Not enough arguments
+		if(args.length < 2) {
 			e.getChannel().sendMessage(":x: **Incorrect usage!**\nCorrect usage: `" + App.prefix + "unprotect <#channel>`").queue();
 			return;
 		}
 		
+		// Bot does not have correct server permissions
 		if(!e.getGuild().getSelfMember().hasPermission(App.permissions)) {
 			e.getChannel().sendMessage(":x: **Permissions are not correct!**\nMake sure the I have the requested permissions from the invite-link. Else I won't work properly!").queue();
 			return;
@@ -39,7 +43,8 @@ public class UnProtectChannel extends ListenerAdapter {
 		
 		TextChannel targetChannel = e.getMessage().getMentionedChannels().get(0);
 		
-		if(!channels.isChannelProtected(targetChannel)) { // Tagged channel is already protected
+		// Tagged channel is already protected
+		if(!channels.isChannelProtected(targetChannel)) {
 			e.getChannel().sendMessage(":x: **Channel is not protected!**").queue();
 			return;
 		}
