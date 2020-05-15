@@ -62,8 +62,8 @@ public class GuildReady extends ListenerAdapter {
 		
 		msg.setDescription("I'm very excited to join you!\n"
 				+ "My setup is really easy. I'll even walk you through it right here!\n\n"
-				+ "To password protect a channel, simply use the command `" + App.prefix + "protect <#channel> <password>`.\n"
-				+ "Note that you can only set one password per channel. Also make sure you actually tag the channel with the `#` character.\n\n"
+				+ "To password protect a channel, simply use the command `" + App.prefix + "protect <password> <#channel>`.\n"
+				+ "Note that you can only set one password per channel. Also make sure you actually tag the text channel with the `#` character. If it's a voice channel then type its name.\n\n"
 				+ "If you wish to un-protect a channel, then simply do `" + App.prefix + "unprotect <#channel>`.\n\n"
 				+ "Only members with the administrator permission, or the manage channels permission can use the above commands.\n\n"
 				+ "For the regular users it's very easy to use. All they have to do is type `" + App.prefix + "password` anywhere in the server and I will send them a direct message containing more information.\n"
