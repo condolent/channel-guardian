@@ -11,6 +11,7 @@ import com.jonteohr.discord.guardian.sql.Query;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
@@ -63,11 +64,12 @@ public class OnDirect extends ListenerAdapter {
 		for(int i = 0; i < guilds.size(); i++) {
 			Guild guild = e.getJDA().getGuildById(guilds.get(i));
 			TextChannel channel = guild.getTextChannelById(channels.get(i));
+			VoiceChannel voiceChannel = guild.getVoiceChannelById(channels.get(i));
 			String pw = passwords.get(i);
 			Role role = guild.getRoleById(roles.get(i));
 			
 			if(guild.getName().equalsIgnoreCase(guildName)) {
-				if(!guild.getTextChannels().contains(channel)) // if the channel is not in this server
+				if(!guild.getTextChannels().contains(channel) && !guild.getVoiceChannels().contains(voiceChannel)) // if the channel is not in this server
 					continue;
 				if(!pw.equalsIgnoreCase(password)) // if the wrong pw for the channel/server was given
 					continue;
@@ -76,10 +78,8 @@ public class OnDirect extends ListenerAdapter {
 					e.getChannel().sendMessage(guild.getName() + " has an error with the roles. Please contact an server administrator to inform them about this!").queue();
 					break;
 				}
-				e.getChannel().sendMessage("Correct! I have given you a role to access the channel " + channel.getName() + " inside server " + guild.getName()).queue();
+				e.getChannel().sendMessage("Correct! I have given you a role to access the channel " + (channel != null ? channel.getName() : voiceChannel.getName()) + " inside server " + guild.getName()).queue();
 				break;
-			} else {
-				e.getChannel().sendMessage("I don't know this server.").queue();
 			}
 		}
 		

@@ -13,6 +13,7 @@ import com.jonteohr.discord.guardian.sql.Query;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
@@ -41,46 +42,104 @@ public class UnProtectChannel extends ListenerAdapter {
 			return;
 		}
 		
-		TextChannel targetChannel = e.getMessage().getMentionedChannels().get(0);
+		// Create the channel name
+		String name = "";
+		for(int i = 1; i < args.length; i++) {
+			name = name + args[i];
+		}
 		
-		// Tagged channel is already protected
-		if(!channels.isChannelProtected(targetChannel)) {
-			e.getChannel().sendMessage(":x: **Channel is not protected!**").queue();
+		// No channel mentioned and not a voice channel
+		if(e.getMessage().getMentionedChannels().size() < 1 && e.getGuild().getVoiceChannelsByName(name, true).size() < 1) {
+			e.getChannel().sendMessage(":x: No text channel was mentioned, and could not find a voice channel named ").queue(); //name).queue();
 			return;
 		}
 		
-		List<String> roleList = new ArrayList<String>();
-		ResultSet res = sql.queryGet("SELECT role FROM channels WHERE channel='" + targetChannel.getId() + "' AND guild_id='" + e.getGuild().getId() + "';");
-		try {
-			while(res.next()) {
-				roleList.add(res.getString(1));
-			}
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-			return;
-		}
-		
-		Role accessRole = e.getGuild().getRoleById(roleList.get(0));
-		
-		
-		if(!e.getGuild().getSelfMember().hasPermission(Permission.ADMINISTRATOR)) { // If bot doesn't have admin permissions, we gotta dig deeper.
-			String perms = "";
-			for(Permission perm : App.channelPerms) {
-				perms = perms + "`" + perm.getName() + "`\n";
-			}
-
-			if(!e.getGuild().getSelfMember().hasPermission(targetChannel, App.channelPerms)) { // Bot does not have the channel permissions
-				e.getChannel().sendMessage(":x: **Channel permissions insufficient!**\nI need these permissions in the channel:\n" + perms).queue();
+		// It's a text channel!
+		if(e.getMessage().getMentionedChannels().size() > 0) {
+			TextChannel targetChannel = e.getMessage().getMentionedChannels().get(0);
+			
+			// Tagged channel is already protected
+			if(!channels.isChannelProtected(targetChannel)) {
+				e.getChannel().sendMessage(":x: **Channel is not protected!**").queue();
 				return;
 			}
-		}
-		
-		if(!channels.unProtectChannel(targetChannel, accessRole)) {
-			e.getChannel().sendMessage(":x: **Something went wrong.**").queue();
+			
+			List<String> roleList = new ArrayList<String>();
+			ResultSet res = sql.queryGet("SELECT role FROM channels WHERE channel='" + targetChannel.getId() + "' AND guild_id='" + e.getGuild().getId() + "';");
+			try {
+				while(res.next()) {
+					roleList.add(res.getString(1));
+				}
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+				return;
+			}
+			
+			Role accessRole = e.getGuild().getRoleById(roleList.get(0));
+			
+			if(!e.getGuild().getSelfMember().hasPermission(Permission.ADMINISTRATOR)) { // If bot doesn't have admin permissions, we gotta dig deeper.
+				String perms = "";
+				for(Permission perm : App.channelPerms) {
+					perms = perms + "`" + perm.getName() + "`\n";
+				}
+
+				if(!e.getGuild().getSelfMember().hasPermission(targetChannel, App.channelPerms)) { // Bot does not have the channel permissions
+					e.getChannel().sendMessage(":x: **Channel permissions insufficient!**\nI need these permissions in the channel:\n" + perms).queue();
+					return;
+				}
+			}
+			
+			if(!channels.unProtectChannel(targetChannel, accessRole)) {
+				e.getChannel().sendMessage(":x: **Something went wrong.**").queue();
+				return;
+			}
+
+			e.getChannel().sendMessage(":white_check_mark: Channel " + targetChannel.getAsMention() + " is no longer password protected!").queue();
 			return;
 		}
+		
+		// it's a voice channel
+		else if(e.getGuild().getVoiceChannelsByName(name, true).size() > 0) {
+			VoiceChannel targetChannel = e.getGuild().getVoiceChannelsByName(name, true).get(0);
+			
+			// Tagged channel is already protected
+			if(!channels.isChannelProtected(targetChannel)) {
+				e.getChannel().sendMessage(":x: **Channel is not protected!**").queue();
+				return;
+			}
+			
+			List<String> roleList = new ArrayList<String>();
+			ResultSet res = sql.queryGet("SELECT role FROM channels WHERE channel='" + targetChannel.getId() + "' AND guild_id='" + e.getGuild().getId() + "';");
+			try {
+				while(res.next()) {
+					roleList.add(res.getString(1));
+				}
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+				return;
+			}
+			
+			Role accessRole = e.getGuild().getRoleById(roleList.get(0));
+			
+			if(!e.getGuild().getSelfMember().hasPermission(Permission.ADMINISTRATOR)) { // If bot doesn't have admin permissions, we gotta dig deeper.
+				String perms = "";
+				for(Permission perm : App.channelPerms) {
+					perms = perms + "`" + perm.getName() + "`\n";
+				}
 
-		e.getChannel().sendMessage(":white_check_mark: Channel " + targetChannel.getAsMention() + " is no longer password protected!").queue();
-		return;
+				if(!e.getGuild().getSelfMember().hasPermission(targetChannel, App.channelPerms)) { // Bot does not have the channel permissions
+					e.getChannel().sendMessage(":x: **Channel permissions insufficient!**\nI need these permissions in the channel:\n" + perms).queue();
+					return;
+				}
+			}
+			
+			if(!channels.unProtectChannel(targetChannel, accessRole)) {
+				e.getChannel().sendMessage(":x: **Something went wrong.**").queue();
+				return;
+			}
+
+			e.getChannel().sendMessage(":white_check_mark: Channel " + targetChannel.getName() + " is no longer password protected!").queue();
+			return;
+		}
 	}
 }
