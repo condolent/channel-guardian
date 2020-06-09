@@ -44,7 +44,7 @@ public class ProtectChannel extends ListenerAdapter {
 		// Create the channel name
 		String name = "";
 		for(int i = 2; i < args.length; i++) {
-			name = name + args[i];
+			name = name + " " + args[i];
 		}
 		
 		// No channel mentioned and not a voice channel
