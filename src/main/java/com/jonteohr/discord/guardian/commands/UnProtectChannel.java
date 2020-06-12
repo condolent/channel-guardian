@@ -45,7 +45,11 @@ public class UnProtectChannel extends ListenerAdapter {
 		// Create the channel name
 		String name = "";
 		for(int i = 1; i < args.length; i++) {
-			name = name + args[i];
+			if(i == args.length - 1) {
+				name = name + args[i];
+				break;
+			}
+			name = name + args[i] + " ";
 		}
 		
 		// No channel mentioned and not a voice channel
