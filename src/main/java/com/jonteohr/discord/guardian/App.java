@@ -23,6 +23,8 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.utils.MemberCachePolicy;
+import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 public class App {
 	public static JDA jda;
@@ -34,14 +36,24 @@ public class App {
 	
 	public static Collection<Permission> permissions = new ArrayList<Permission>();
 	public static Collection<Permission> channelPerms = new ArrayList<Permission>();
+
+	private static Collection<CacheFlag> cacheFlags = new ArrayList<CacheFlag>();
 	
 	public static void main(String[] args) throws LoginException {
 		PropertyHandler prop = new PropertyHandler();
 		Collection<GatewayIntent> intents = new ArrayList<GatewayIntent>();
-		intents.addAll(GatewayIntent.getIntents(GatewayIntent.ALL_INTENTS));
+		intents.addAll(GatewayIntent.getIntents(GatewayIntent.DEFAULT));
+		
+		// Disabled ChacheFlags
+		cacheFlags.add(CacheFlag.ACTIVITY);
+		cacheFlags.add(CacheFlag.CLIENT_STATUS);
+		cacheFlags.add(CacheFlag.EMOTE);
+		cacheFlags.add(CacheFlag.VOICE_STATE);
 		
 		jda = JDABuilder.create(prop.loadProperty("token"), intents)
 				.setStatus(OnlineStatus.ONLINE)
+				.setMemberCachePolicy(MemberCachePolicy.OWNER)
+				.disableCache(cacheFlags)
 				.build();
 		
 		dbl = new DiscordBotListAPI.Builder()
